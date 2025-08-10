@@ -2,16 +2,15 @@ package core.basesyntax.service.impl;
 
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.service.ShopService;
+import core.basesyntax.storage.Storage;
 import core.basesyntax.strategy.OperationHandler;
 import core.basesyntax.strategy.OperationStrategy;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ShopServiceImpl implements ShopService {
     private final OperationStrategy operationStrategy;
-    private final Map<String, Integer> storage = new HashMap<>();
 
     public ShopServiceImpl(OperationStrategy operationStrategy) {
         if (operationStrategy == null) {
@@ -32,7 +31,7 @@ public class ShopServiceImpl implements ShopService {
             }
             try {
                 OperationHandler handler = operationStrategy.get(transaction.getOperation());
-                handler.handle(transaction, storage);
+                handler.handle(transaction, Storage.storage);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to process transaction: " + transaction, e);
             }
@@ -41,6 +40,6 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public Map<String, Integer> getStorage() {
-        return Collections.unmodifiableMap(storage);
+        return Collections.unmodifiableMap(Storage.storage);
     }
 }

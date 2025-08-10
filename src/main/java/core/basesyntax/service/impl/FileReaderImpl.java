@@ -1,6 +1,7 @@
 package core.basesyntax.service.impl;
 
 import core.basesyntax.service.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -12,18 +13,15 @@ public class FileReaderImpl implements FileReader {
 
     @Override
     public List<String> read(String path) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
         List<String> result = new ArrayList<>();
-        for (String line : lines) {
-            if (line == null) {
-                continue;
+        try (BufferedReader reader
+                     = Files.newBufferedReader(Paths.get(path), StandardCharsets.UTF_8)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    result.add(line);
+                }
             }
-
-            String trimmed = line.trim();
-            if (trimmed.isEmpty()) {
-                continue;
-            }
-            result.add(trimmed);
         }
         return result;
     }

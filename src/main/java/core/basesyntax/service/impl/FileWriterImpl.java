@@ -9,7 +9,13 @@ import java.nio.file.Paths;
 public class FileWriterImpl implements FileWriter {
 
     @Override
-    public void write(String data, String path) throws IOException {
-        Files.write(Paths.get(path), data.getBytes(StandardCharsets.UTF_8));
+    public void write(String data, String path) {
+        try {
+            Files.write(Paths.get(path),
+                    data.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            System.out.println("Failed to write file: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
