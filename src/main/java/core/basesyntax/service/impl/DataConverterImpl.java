@@ -1,5 +1,7 @@
-package core.basesyntax;
+package core.basesyntax.service.impl;
 
+import core.basesyntax.model.FruitTransaction;
+import core.basesyntax.service.DataConverter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class DataConverterImpl implements DataConverter {
                 FruitTransaction transaction = new FruitTransaction(operation, fruit, quantity);
                 transactions.add(transaction);
             } catch (Exception e) {
-                System.out.println("Failed to parse line: " + line + " due to " + e.getMessage());
+                throw new RuntimeException("Failed to parse line: " + line, e);
             }
         }
         return transactions;
