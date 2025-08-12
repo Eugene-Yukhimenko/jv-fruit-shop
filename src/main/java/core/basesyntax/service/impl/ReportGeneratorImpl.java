@@ -5,9 +5,7 @@ import core.basesyntax.service.ShopService;
 import java.util.Map;
 
 public class ReportGeneratorImpl implements ReportGenerator {
-    private static final String HEADER = "fruit,quantity";
     private static final String COMMA = ",";
-    private static final String LINE_SEPARATOR = System.lineSeparator();
     private final ShopService shopService;
 
     public ReportGeneratorImpl(ShopService shopService) {
@@ -17,9 +15,10 @@ public class ReportGeneratorImpl implements ReportGenerator {
     @Override
     public String getReport() {
         StringBuilder sb = new StringBuilder();
-        sb.append(HEADER).append(LINE_SEPARATOR);
+        sb.append("fruit").append(COMMA).append("quantity").append(System.lineSeparator());
         for (Map.Entry<String, Integer> entry : shopService.getStorage().entrySet()) {
-            sb.append(entry.getKey()).append(COMMA).append(entry.getValue()).append(LINE_SEPARATOR);
+            sb.append(entry.getKey()).append(COMMA).append(entry.getValue()).append(System
+                    .lineSeparator());
         }
         return sb.toString();
     }

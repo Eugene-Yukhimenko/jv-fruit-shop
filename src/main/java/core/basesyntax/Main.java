@@ -22,39 +22,31 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-
     private static final String INPUT_FILE_PATH
             = "src/main/resources/reportToRead.csv";
     private static final String OUTPUT_FILE_PATH
             = "src/main/resources/finalReport.csv";
 
     public static void main(String[] args) throws IOException {
-        final FileReader fileReader = new FileReaderImpl();
-        final List<String> inputReport = fileReader.read(INPUT_FILE_PATH);
+        FileReader fileReader = new FileReaderImpl();
+        List<String> inputReport = fileReader.read(INPUT_FILE_PATH);
 
-        final DataConverter dataConverter = new DataConverterImpl();
-        final List<FruitTransaction> transactions = dataConverter
-                    .convertToTransaction(inputReport);
+        DataConverter dataConverter = new DataConverterImpl();
 
-        final Map<FruitTransaction
-                    .Operation, OperationHandler> operationHandlers = new HashMap<>();
-        operationHandlers.put(FruitTransaction
-                    .Operation.BALANCE, new BalanceOperation());
-        operationHandlers.put(FruitTransaction
-                    .Operation.SUPPLY, new SupplyOperation());
-        operationHandlers.put(FruitTransaction
-                    .Operation.PURCHASE, new PurchaseOperation());
-        operationHandlers.put(FruitTransaction
-                    .Operation.RETURN, new ReturnOperation());
+        Map<FruitTransaction.Operation, OperationHandler> operationHandlers = new HashMap<>();
+        operationHandlers.put(FruitTransaction.Operation.BALANCE, new BalanceOperation());
+        operationHandlers.put(FruitTransaction.Operation.SUPPLY, new SupplyOperation());
+        operationHandlers.put(FruitTransaction.Operation.PURCHASE, new PurchaseOperation());
+        operationHandlers.put(FruitTransaction.Operation.RETURN, new ReturnOperation());
 
-        final OperationStrategy operationStrategy = new OperationStrategyImpl(
-                operationHandlers);
-        final ShopService shopService = new ShopServiceImpl(
-                operationStrategy);
+        OperationStrategy operationStrategy = new OperationStrategyImpl(operationHandlers);
+        ShopService shopService = new ShopServiceImpl(operationStrategy);
+
+        List<FruitTransaction> transactions = dataConverter
+                .convertToTransaction(inputReport);
         shopService.process(transactions);
 
-        final ReportGenerator reportGenerator = new ReportGeneratorImpl(
-                    shopService);
-        final String resultingReport = reportGenerator.getReport();
+        ReportGenerator reportGenerator = new ReportGeneratorImpl(shopService);
+        String resultingReport = reportGenerator.getReport();
     }
 }

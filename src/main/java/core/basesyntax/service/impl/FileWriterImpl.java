@@ -14,7 +14,6 @@ public class FileWriterImpl implements FileWriter {
             Files.write(Paths.get(path),
                     data.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            System.out.println("Failed to write file: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
